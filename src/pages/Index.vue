@@ -5,7 +5,7 @@
     export default {
         data(){
             return {
-                welcome:'Hello,Vue!!'
+                welcome:'Hello,Vue!'
             }
         }
     }    
