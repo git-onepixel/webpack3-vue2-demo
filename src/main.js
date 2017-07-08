@@ -2,7 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import App from './components/App.vue'
 import Index from './pages/Index.vue'
-import '../resources/less/main.less'
+import './resources/less/main.less'
 import FastClick from 'fastclick'
 
 FastClick.attach(document.body);
