@@ -1,10 +1,8 @@
 ## webpack3+vue2打包示例
-* ### vue2 快速搭建轻量级MVVM前端框架
 
-* ### vue-router 实现单页面路由
-
-* ### webpack3 支持:  
-
+* vue2 快速搭建轻量级MVVM前端框架
+* vue-router 实现单页面路由
+* webpack3 支持:  
   * 打包压缩，图片base64转码  
   * 公共模块提取，css文件抽离  
   * 支持less解析  
