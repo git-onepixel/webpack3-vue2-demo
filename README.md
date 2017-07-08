@@ -10,5 +10,15 @@
   * 支持ES6语法转ES5  
   * 支持开发hot调试模式  
   * 新增模块串联功能，减少不必要的代码
+  
+### Building
+
+``` bash
+npm install
+# watch:
+npm run dev
+# build:
+npm run build
+```
 
 
