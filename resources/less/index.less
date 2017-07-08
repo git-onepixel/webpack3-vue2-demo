@@ -1,14 +1,68 @@
-div{
-    color: red;
-    display: flex;
-    width: 10rem;
-    height: 10rem;
-    background: url('../images/large.jpg') no-repeat;
-    background-size: 100%;
-}
-p{
-    width: 10rem;
-    height: 10rem;
-    background: url('../images/baidu.png') no-repeat;
-    background-size: 100%;
+.index-wrapper{
+    margin: .5rem;
+    h3{text-align: center}
+
+    input[type="checkbox"] {
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        appearance: none;
+        position: relative;
+        outline: none;
+        width: 2.6rem;
+        height: 1.5rem;
+        background: #dfdfdf;
+        border: 1px solid #dfdfdf;
+        box-sizing: border-box;
+        border-radius: 99px;
+        
+        &::before {
+            position: absolute;
+            content: "";
+            top: 0;
+            left: 0;
+            height: 1.5rem;
+            width: 2.6rem;
+            background: #fdfdfd;
+            border: 1px solid #dfdfdf;
+            border-radius: 99px;
+            -webkit-transition: all .3s;
+            -moz-transition: all .3s;
+            transition: all .3s;
+            box-sizing: border-box;
+        };
+        
+        &::after {
+            position: absolute;
+            content: "";
+            top: 0;
+            left: 0;
+            height: 1.4rem;
+            width: 1.4rem;
+            background: #fff;
+            border: 1px solid #fdfdfd;
+            border-radius: 99px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+            -webkit-transition: all .3s;
+            -moz-transition: all .3s;
+            transition: all .3s;
+            box-sizing: border-box;
+        };
+        
+        &:checked {
+            background: #32C759;
+            border: 1px solid #32C759;
+        };
+        
+        &:checked::before {
+            -webkit-transform: scale(0);
+            -moz-transform: scale(0);
+            transform: scale(0);
+        };
+        
+        &:checked::after {
+            -webkit-transform: translateX(1.1rem);
+            -moz-transform: translateX(1.1rem);
+            transform: translateX(1.1rem);
+        }
+    }
 }

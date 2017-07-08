@@ -1,49 +1,50 @@
 /**
- * 全局安装：webpack -g
+ * 全局安装：npm install webpack -g
  * 
- * Webpack: webpack --save-dev 
- * 开发服务器：webpack-dev-server --save-dev
- * 跨平台环境：cross-env --save-dev
- * Promise: es6-promise --save
- * Vue和路由: vue vue-router --save
+ * Webpack: npm install webpack --save-dev 
+ * 开发服务器：npm install webpack-dev-server --save-dev
+ * 跨平台环境：npm install cross-env --save-dev
+ * Promise: npm install es6-promise --save
+ * Vue和路由: npm install vue vue-router --save
  * 
  */
 
-let webpack = require('webpack');
+const webpack = require('webpack');
 
 /**
- * extract-text-webpack-plugin --save-dev
+ * npm install extract-text-webpack-plugin --save-dev
  * 默认样式会被打包在HTML中,该插件的作用就是独立打包样式文件
  */
-let ExtractTextPlugin = require('extract-text-webpack-plugin'); 
+const ExtractTextPlugin = require('extract-text-webpack-plugin'); 
 
 /**
- * html-webpack-plugin --save-dev
+ * npm install html-webpack-plugin --save-dev
  * 根据模板动态生成html页面，并将output的资源添加到文件中
  */
-let HtmlWebpackPlugin = require('html-webpack-plugin');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 /**
- * clean-webpack-plugin --save-dev
+ * npm install clean-webpack-plugin --save-dev
  * 发布前自动清空发布目录里的内容
  */
-let CleanWebpackPlugin = require('clean-webpack-plugin');
+const CleanWebpackPlugin = require('clean-webpack-plugin');
 
 
 module.exports = {
     /**
-     * 入口
-     * 如果以key/value的形式指定，则key就是一个chunk,这在分离公共模块的时候会用到
+     * 入口文件
+     * 如果以key/value的形式指定，则一个key就是一个chunk
+     * 这在分离公共模块的时候会用到
      */
     entry:{
         //主程序入口文件
         app:'./src/main.js',
-        //指定公共模块，并做分离
+        //指定公共模块
         vendor:['jquery','fastclick','vue']
     },
     
     /**
-     * 输出
+     * 输出文件
      */
     output:{
         path:__dirname + '/build',
@@ -55,7 +56,7 @@ module.exports = {
         /**
          * ES6 Loader 规范定义了 System.import 方法，用于在运行时动态加载 ES6 模块;
          * Webpack 把 System.import 作为拆分点，然后把被请求的模块放入一个单独的 "块" (chunk)中;
-         * 这种分块加载机制依赖于Promise，因此在旧版浏览器下需提供一个Promise的 polyfill
+         * 这种分块加载机制依赖于Promise，因此在旧版浏览器下需提供一个Promise的 polyfill.
          */
         noParse:'/es6-promise\.js$/',
         
@@ -70,14 +71,15 @@ module.exports = {
         loaders:[
             {
                 /**
-                 * 安装Vue文件解析：vue-loader vue-html-loader vue-template-compiler --save-dev
+                 * npm install vue-loader vue-html-loader vue-template-compiler --save-dev
                  */
                 test:/\.vue$/,
                 loader:'vue-loader'
             },
             {
                 /**
-                 * 安装转换器Babel：babel-core babel-loader babel-plugin-transform-runtime babel-preset-es2015 babel-runtime --save-dev
+                 * npm install babel-core babel-loader babel-plugin-transform-runtime babel-preset-es2015 babel-runtime --save-dev
+                 * 
                  * Babel 是把ES2015语法转换为ES5语法，让代码在老式浏览器里也能运行，但还需要做以下配置：
                  * 
                  * 新建文件.babelrc，存放在项目的根目录下,并添加如下配置：
@@ -85,7 +87,8 @@ module.exports = {
                  *    "presets": ["es2015"], 
                  *    "plugins": ["transform-runtime"] 
                  * }
-                 * 其主要作用是配合Babel 设定转码规则、语法填充(polyfills) 和 辅助函数(helper functions)
+                 * 
+                 * 其主要作用是配合Babel，设定转码规则、语法填充(polyfills) 和 辅助函数(helper functions)
                  * 
                  * presets提供以下的规则集，你可以根据需要安装：
                  *  # ES2015转码规则
@@ -98,11 +101,11 @@ module.exports = {
                  *    babel-preset-stage-2
                  *    babel-preset-stage-3
                  * 
-                 * Loader Options 要和.babelrc 配置内容一样
+                 * Loader Options 需和 .babelrc 配置内容一样
                  * 
                  */
                 test:/\.js$/,
-                //exclude: /node_modules|vue\/dist|vue-router\/|vue-loader\//,
+                exclude: /node_modules|vue\/dist|vue-router\/|vue-loader\//,
                 loader:'babel-loader',
                 options:{
                     //设定转码规则
@@ -113,7 +116,7 @@ module.exports = {
             },
             {
                 /**
-                 * 安装样式解析：style-loader css-loader less less-loader --save-dev
+                 * npm install style-loader css-loader less less-loader --save-dev
                  * 
                  * 每个Loader的作用如下：
                  * 
@@ -133,12 +136,12 @@ module.exports = {
                  */
                 test:/\.(css|less)$/,
                 use: ExtractTextPlugin.extract({
-                    failback:'style-loader',
+                    fallback:'style-loader',
                     use:[{
                             loader: 'css-loader',
                             options: {
-                                //CSS压缩
-                                minimize: true
+                                //CSS压缩(生产环境)
+                                minimize: process.env.NODE_ENV === 'production'
                             }
                         },
                         {
@@ -149,7 +152,7 @@ module.exports = {
             },
             {   
                 /**
-                 * 安装图片解析器：url-loader file-loader --save-dev
+                 * npm install url-loader file-loader --save-dev
                  * 
                  * 作用如下：
                  * 
@@ -162,7 +165,7 @@ module.exports = {
                 loader: 'url-loader',
                 query:{
                     limit:8192,
-                    name:'images/[hash:8].[name].[ext]'
+                    name:'images/[name].[hash:8].[ext]'
                 } 
             }
         ]
@@ -254,7 +257,14 @@ if(process.env.NODE_ENV === 'production'){
                 collapseWhitespace: true,
                 conservativeCollapse: true 
             } 
-        })
+        }),
+        
+        /**
+         * webpack3 新增模块串联功能
+         * 以前webpack 会为每个模块创建各自的闭包
+         * 使用串联功能将模块连接到一起后，就只需为这真个模块创建一个单独的闭包，从而减少不必要的代码
+         */
+        new webpack.optimize.ModuleConcatenationPlugin()
     ]
 }else{
     /**
@@ -282,7 +292,7 @@ if(process.env.NODE_ENV === 'production'){
          */
         new webpack.optimize.CommonsChunkPlugin({
             name:'vendor',
-            filename:'common.bundle.js?[chunkhash:8]',
+            filename:'common.bundle.js',
             minChunks:Infinity
         }),
  
@@ -290,7 +300,7 @@ if(process.env.NODE_ENV === 'production'){
          * 提取样式文件 
          */
         new ExtractTextPlugin({
-            filename:'app.bundle.css?[chunkhash:8]'
+            filename:'app.bundle.css'
         })
     ]
 

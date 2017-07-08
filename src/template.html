@@ -2,9 +2,76 @@
 <html>
     <head>
         <title><%= htmlWebpackPlugin.options.title %></title>
-        <meta name="viewport" charset="utf-8" content="width=device,initial-scale=1,maximum-scale=1,user-scalable=no">
+        
+        <!--设置viewport -->
+        <meta name="viewport" charset="utf-8" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=no,minimal-ui" />
+
+        <!--SEO优化-->
+        <link rel="canonical" href="" />
+        <meta name="description" content="不超过150个字符" />
+        <meta name="keywords" content="html5, css3,js" />
+        <meta name="author" content="一像素" />
+        <meta name="robots" content="none,noindex,nofollow,all,index,follow" />
+
+        <!--不允许搜索引擎对网页转码-->
+        <meta http-equiv="Cache-Control" content="no-transform" />
+        <meta http-equiv="Cache-Control" content="no-siteapp" />
+
+        <!--页面同时适合在移动设备和PC上进行浏览。-->
+        <meta name="applicable-device" content="pc,mobile" />
+
+        <!--开启DNS预获取，减少DNS请求次数-->
+        <meta http-equiv="x-dns-prefetch-control" content="on" />
+        <!--对特定网址进行DNS预获取-->
+        <link rel="dns-prefetch" target="_blank" href="http://baidu.com" />
+
+        <!--禁止以下格式检测-->
+        <meta name="format-detection" content="telephone=no,email=no,adress=no">
+
+        <!--开启全屏显示-->
+        <meta name="apple-mobile-web-app-capable" content="yes">
+
+        <!--QQ强制竖屏-->
+        <meta name="x5-orientation" content="portrait">
+        <!--UC强制全屏-->
+        <meta name="full-screen" content="yes">
+        <!--QQ强制全屏-->
+        <meta name="x5-fullscreen" content="true">
+        <!--UC应用模式-->
+        <meta name="browsermode" content="application">
+        <!--QQ应用模式-->
+        <meta name="x5-page-mode" content="app">
+        
+        <script type="text/javascript">
+            //rem参考值设定
+            (function(win, doc) {
+                var docEl = doc.documentElement,
+                    //屏幕旋转或缩放
+                    resizeEvt = 'orientationchange' in window ? 'orientationchange' : 'resize',
+                    recalc = function() {
+                        //获取设备的像素宽
+                        var clientWidth = window.screen.width;
+                        if (!clientWidth) return;
+                        var fontSize = 20 * (clientWidth / 375);
+                        fontSize = fontSize > 24 ? 24 : fontSize;
+                        //如果非移动设备，字体统一为20px    
+                        if (!/windows phone|iphone|android/ig.test(window.navigator.userAgent)) {
+                            fontSize = 20;
+                        }
+                        //设置HTML字体大小
+                        docEl.style.fontSize = fontSize + 'px';
+                        //设备像素比
+                        docEl.setAttribute('device-pixel-ratio', window.devicePixelRatio);
+                    };
+                if (!doc.addEventListener) return;
+                win.addEventListener(resizeEvt, recalc, false);
+                doc.addEventListener('DOMContentLoaded', recalc, false);
+            })(window, document)
+        </script>
+
     </head>
     <body>
+        <!--Viewport-->
         <div id="app"></div>
     </body>
 </html>
