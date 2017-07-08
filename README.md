@@ -1,4 +1,4 @@
-## webpack3+vue2打包示例
+## webpack3+vue2集成示例
 
 * vue2 快速搭建轻量级MVVM前端框架
 * vue-router 实现单页面路由
