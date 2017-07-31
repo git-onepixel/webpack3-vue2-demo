@@ -1,31 +1,29 @@
 /**
- * 全局安装：npm install webpack -g
- * 
- * Webpack: npm install webpack --save-dev 
- * 开发服务器：npm install webpack-dev-server --save-dev
- * 跨平台环境：npm install cross-env --save-dev
- * Promise: npm install es6-promise --save
- * Vue和路由: npm install vue vue-router --save
- * 
+ * 全局安装WP： webpack -g
+ * 本地安装WP:  webpack --save-dev 
+ * 配置开发服务器：webpack-dev-server --save-dev
+ * 配置跨平台环境：cross-env --save-dev
+ * 安装Promise: es6-promise --save
+ * 安装Vue和路由: vue vue-router --save
  */
 
 const webpack = require('webpack');
 
 /**
- * npm install extract-text-webpack-plugin --save-dev
- * 默认样式会被打包在HTML中,该插件的作用就是独立打包样式文件
+ * 作用：默认样式会被打包在HTML中,该插件的作用就是独立打包样式文件
+ * 安装：extract-text-webpack-plugin --save-dev  
  */
 const ExtractTextPlugin = require('extract-text-webpack-plugin'); 
 
 /**
- * npm install html-webpack-plugin --save-dev
- * 根据模板动态生成html页面，并将output的资源添加到文件中
+ * 作用：根据模板动态生成html页面，并将output的资源添加到文件中
+ * 安装：html-webpack-plugin --save-dev
  */
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 /**
- * npm install clean-webpack-plugin --save-dev
- * 发布前自动清空发布目录里的内容
+ * 作用：发布前自动清空发布目录里的内容
+ * 安装：clean-webpack-plugin --save-dev
  */
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 
@@ -56,7 +54,7 @@ module.exports = {
         /**
          * ES6 Loader 规范定义了 System.import 方法，用于在运行时动态加载 ES6 模块;
          * Webpack 把 System.import 作为拆分点，然后把被请求的模块放入一个单独的 "块" (chunk)中;
-         * 这种分块加载机制依赖于Promise，因此在旧版浏览器下需提供一个Promise的 polyfill.
+         * 这种分块加载机制依赖于Promise，因此在旧版浏览器下需提供一个Promise的 Polyfill.
          */
         noParse:'/es6-promise\.js$/',
         
@@ -71,15 +69,17 @@ module.exports = {
         loaders:[
             {
                 /**
-                 * npm install vue-loader vue-html-loader vue-template-compiler --save-dev
+                 * 作用：解析vue文件
+                 * 安装：vue-loader vue-html-loader vue-template-compiler --save-dev
                  */
                 test:/\.vue$/,
                 loader:'vue-loader'
             },
             {
                 /**
-                 * npm install babel-core babel-loader babel-plugin-transform-runtime babel-preset-es2015 babel-runtime --save-dev
+                 * 安装：babel-core babel-loader babel-plugin-transform-runtime babel-preset-es2015 babel-runtime --save-dev
                  * 
+                 * 作用：
                  * Babel 是把ES2015语法转换为ES5语法，让代码在老式浏览器里也能运行，但还需要做以下配置：
                  * 
                  * 新建文件.babelrc，存放在项目的根目录下,并添加如下配置：
@@ -101,7 +101,7 @@ module.exports = {
                  *    babel-preset-stage-2
                  *    babel-preset-stage-3
                  * 
-                 * Loader Options 需和 .babelrc 配置内容一样
+                 * Loader Options 须和 .babelrc 配置内容一样
                  * 
                  */
                 test:/\.js$/,
@@ -116,7 +116,7 @@ module.exports = {
             },
             {
                 /**
-                 * npm install style-loader css-loader less less-loader --save-dev
+                 * 安装：style-loader css-loader less less-loader --save-dev
                  * 
                  * 每个Loader的作用如下：
                  * 
@@ -136,7 +136,10 @@ module.exports = {
                  */
                 test:/\.(css|less)$/,
                 use: ExtractTextPlugin.extract({
+                    // 当use中的loaders 执行失败时，回退到内联模式
                     fallback:'style-loader',
+                    
+                    //配置多loader
                     use:[{
                             loader: 'css-loader',
                             options: {
@@ -152,10 +155,10 @@ module.exports = {
             },
             {   
                 /**
-                 * npm install url-loader file-loader --save-dev
+                 * 安装：url-loader file-loader --save-dev
                  * 
-                 * 作用如下：
-                 * 
+                 * 作用：
+                 *
                  * 如果图片大小在8k以内,则转化为base64内联到css中
                  * 如果图片大于8k,则将图片拷贝到发布目录中，并对url重新设置
                  * 网络图片不做任何处理
@@ -188,6 +191,7 @@ if(process.env.NODE_ENV === 'production'){
         
         /**
          * 暴露全局变量
+         * 安装:jquery --save
          */
         new webpack.ProvidePlugin({
             $:'jquery'
@@ -198,12 +202,15 @@ if(process.env.NODE_ENV === 'production'){
          */
         new webpack.optimize.UglifyJsPlugin({
             mangle:{
+                //指定模块不参与压缩
                 except:['$super','$','exports','require']
             },
             compress:{
+                //移除警告信息
                 warnings:false
             },
             output: {
+                //清除代码中的注释
                 comments: false,
             }
         }),
@@ -212,7 +219,7 @@ if(process.env.NODE_ENV === 'production'){
          * 抽离公共模块 
          */
         new webpack.optimize.CommonsChunkPlugin({
-            name:'vendor',
+            name:'vendor', //entry中配置的chunk
             filename:'common.bundle.js?[chunkhash:8]',
             minChunks:Infinity //最小引用次数
         }),
@@ -225,7 +232,8 @@ if(process.env.NODE_ENV === 'production'){
         }),
 
         /**
-         * build之前清理发布文件夹 
+         * build之前清理发布文件夹
+         * 路径：根目录下的build文件夹
          */
         new CleanWebpackPlugin(['build'],{
             root:__dirname,
