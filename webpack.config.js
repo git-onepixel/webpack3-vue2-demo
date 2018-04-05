@@ -54,7 +54,7 @@ module.exports = {
      */
     devServer: {
         host: '0.0.0.0', // 允许通过localhost、127.0.0.1以及IP地址访问
-        disableHostCheck: true, // 关于host检测，否则无法通过本机IP访问
+        disableHostCheck: true, // 关闭host检测，否则无法通过本机IP访问
         // 代理配置
         proxy: {
           '/some/path*': {
@@ -62,7 +62,6 @@ module.exports = {
              secure: false
           }
         }
-        
     },
     
     module:{
