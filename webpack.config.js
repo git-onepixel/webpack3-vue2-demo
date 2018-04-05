@@ -34,19 +34,35 @@ module.exports = {
      * 如果以key/value的形式指定，则一个key就是一个chunk
      * 这在分离公共模块的时候会用到
      */
-    entry:{
+    entry: {
         //主程序入口文件
-        app:'./src/main.js',
+        app: './src/main.js',
         //指定公共模块
-        vendor:['jquery','fastclick','vue']
+        vendor: ['jquery','fastclick','vue']
     },
     
     /**
      * 输出文件
      */
-    output:{
-        path:__dirname + '/build',
-        filename:'[name].bundle.js?[chunkhash:8]'
+    output: {
+        path: __dirname + '/build',
+        filename: '[name].bundle.js?[chunkhash:8]'
+    },
+    
+    /**
+     * webpack-dev-server
+     */
+    devServer: {
+        host: '0.0.0.0', // 允许通过localhost、127.0.0.1以及IP地址访问
+        disableHostCheck: true, // 关于host检测，否则无法通过本机IP访问
+        // 代理配置
+        proxy: {
+          '/some/path*': {
+             target: 'https://other-server.example.com',
+             secure: false
+          }
+        }
+        
     },
     
     module:{
@@ -56,7 +72,7 @@ module.exports = {
          * Webpack 把 System.import 作为拆分点，然后把被请求的模块放入一个单独的 "块" (chunk)中;
          * 这种分块加载机制依赖于Promise，因此在旧版浏览器下需提供一个Promise的 Polyfill.
          */
-        noParse:'/es6-promise\.js$/',
+        noParse: '/es6-promise\.js$/',
         
         /**
          * Loaders 被应用于应用程序的资源文件中，通常用来做转换;
@@ -104,12 +120,12 @@ module.exports = {
                  * Loader Options 须和 .babelrc 配置内容一样
                  * 
                  */
-                test:/\.js$/,
+                test: /\.js$/,
                 exclude: /node_modules|vue\/dist|vue-router\/|vue-loader\//,
-                loader:'babel-loader',
-                options:{
+                loader: 'babel-loader',
+                options: {
                     //设定转码规则
-                    presets:['es2015'],
+                    presets: ['es2015'],
                     //语法填充 和 辅助函数
                     plugins: ['transform-runtime']
                 }
@@ -134,22 +150,22 @@ module.exports = {
                  * })
                  * 
                  */
-                test:/\.(css|less)$/,
+                test: /\.(css|less)$/,
                 use: ExtractTextPlugin.extract({
                     // 当use中的loaders 执行失败时，回退到内联模式
-                    fallback:'style-loader',
+                    fallback: 'style-loader',
                     
                     //配置多loader
-                    use:[{
+                    use: [{
                             loader: 'css-loader',
                             options: {
                                 //CSS压缩(生产环境)
                                 minimize: process.env.NODE_ENV === 'production'
                             }
-                        },
-                        {
+                         },
+                         {
                             loader: 'less-loader' 
-                        }
+                         }
                     ]
                 })
             },
@@ -164,11 +180,11 @@ module.exports = {
                  * 网络图片不做任何处理
                  * 
                  */
-                test:/\.(png|jpg|gif)$/,
+                test: /\.(png|jpg|gif)$/,
                 loader: 'url-loader',
-                query:{
-                    limit:8192,
-                    name:'images/[name].[hash:8].[ext]'
+                query: {
+                    limit: 8192,
+                    name: 'images/[name].[hash:8].[ext]'
                 } 
             }
         ]
@@ -184,8 +200,8 @@ if(process.env.NODE_ENV === 'production'){
          * 设置生产环境
          */
         new webpack.DefinePlugin({
-            'process.env':{
-                NODE_ENV:JSON.stringify('production')
+            'process.env': {
+                NODE_ENV: JSON.stringify('production')
             }
         }),
         
@@ -194,20 +210,20 @@ if(process.env.NODE_ENV === 'production'){
          * 安装:jquery --save
          */
         new webpack.ProvidePlugin({
-            $:'jquery'
+            $: 'jquery'
         }),
         
         /**
          * JS文件混淆压缩
          */
         new webpack.optimize.UglifyJsPlugin({
-            mangle:{
-                //指定模块不参与压缩
-                except:['$super','$','exports','require']
+            mangle: {
+                // 指定模块不参与压缩
+                except: ['$super','$','exports','require']
             },
             compress:{
-                //移除警告信息
-                warnings:false
+                // 移除警告信息
+                warnings: false
             },
             output: {
                 //清除代码中的注释
@@ -219,26 +235,26 @@ if(process.env.NODE_ENV === 'production'){
          * 抽离公共模块 
          */
         new webpack.optimize.CommonsChunkPlugin({
-            name:'vendor', //entry中配置的chunk
-            filename:'common.bundle.js?[chunkhash:8]',
-            minChunks:Infinity //最小引用次数
+            name: 'vendor', // entry中配置的chunk
+            filename: 'common.bundle.js?[chunkhash:8]',
+            minChunks: Infinity // 最小引用次数
         }),
  
         /**
          * 提取样式文件
          */ 
         new ExtractTextPlugin({
-            filename:'app.bundle.css?[chunkhash:8]'
+            filename: 'app.bundle.css?[chunkhash:8]'
         }),
 
         /**
          * build之前清理发布文件夹
          * 路径：根目录下的build文件夹
          */
-        new CleanWebpackPlugin(['build'],{
-            root:__dirname,
+        new CleanWebpackPlugin(['build'], {
+            root: __dirname,
             verbose: true,
-            dry:false
+            dry: false
         }),
  
         /**
@@ -246,21 +262,21 @@ if(process.env.NODE_ENV === 'production'){
          */
         new HtmlWebpackPlugin({
             //HTML文件标题，模板文件需要配置变量
-            title:'App',
+            title: 'App',
 
             //模板文件
-            template:__dirname + '/src/template.html',
+            template: __dirname + '/src/template.html',
             
             //JS资源添加到body中
-            inject:'body',
+            inject: 'body',
             
             //输出文件
-            filename:'index.html',
+            filename: 'index.html',
             
             //压缩配置项
-            minify:{
-                minifyJS:true,
-                minifyCSS:true,
+            minify: {
+                minifyJS: true,
+                minifyCSS: true,
                 removeComments: true,
                 collapseWhitespace: true,
                 conservativeCollapse: true 
@@ -274,7 +290,7 @@ if(process.env.NODE_ENV === 'production'){
          */
         new webpack.optimize.ModuleConcatenationPlugin()
     ]
-}else{
+} else {
     /**
      * 开发环境
      */
@@ -283,8 +299,8 @@ if(process.env.NODE_ENV === 'production'){
          * 配置开发环境
          */
         new webpack.DefinePlugin({
-            'process.env':{
-                NODE_ENV:JSON.stringify('development')
+            'process.env': {
+                NODE_ENV: JSON.stringify('development')
             }
         }),
         
@@ -292,23 +308,23 @@ if(process.env.NODE_ENV === 'production'){
          * 暴露全局变量
          */
         new webpack.ProvidePlugin({
-            $:'jquery'
+            $: 'jquery'
         }),
         
         /**
          * 抽离公共模块 
          */
         new webpack.optimize.CommonsChunkPlugin({
-            name:'vendor',
-            filename:'common.bundle.js',
-            minChunks:Infinity
+            name: 'vendor',
+            filename: 'common.bundle.js',
+            minChunks: Infinity
         }),
  
         /**
          * 提取样式文件 
          */
         new ExtractTextPlugin({
-            filename:'app.bundle.css'
+            filename: 'app.bundle.css'
         })
     ]
 
